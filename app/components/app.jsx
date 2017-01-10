@@ -8,12 +8,16 @@ class App extends ReactBaseComponent {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
+      taskTitle: '',
       isStart: false,
       isBreak: false,
       time: this.props.duration,
     };
-    this.bind('onClickToStart', 'onClickToReset', 'tick', 'notification');
+    this.bind('onClickToStart', 'onClickToReset', 'tick', 'notification', 'onChangeText');
+  }
+
+  onChangeText(key, value) {
+    this.setState({ [key]: value });
   }
 
   notification(title) {
@@ -53,7 +57,7 @@ class App extends ReactBaseComponent {
   }
 
   break() {
-    this.setState({ isStart: true, isBreak: true, time: this.props.breakTime });
+    this.setState({ isStart: true, isBreak: true, time: this.props.breakTime, taskTitle: '' });
   }
 
   reset() {
@@ -62,16 +66,23 @@ class App extends ReactBaseComponent {
   }
 
   render() {
-    const { isBreak, time, isStart } = this.state;
+    const { time, isStart, isBreak, taskTitle } = this.state;
+    const isPause = !isStart && !isBreak && (time < this.props.duration);
+    const taskTitleNode = (
+      (isStart || isPause) ?
+        <h3>{taskTitle}</h3> :
+        <input
+          type="text"
+          placeholder="task"
+          onChange={(e) => this.onChangeText('taskTitle', e.target.value)}
+          value={this.state.taskTitle}
+        ></input>
+    );
     return (
       <div className="container">
         <div className="jumbotron main">
           <h2>Pomodoro Timer</h2>
-          <img
-            src={isBreak ? '../assets/images/electron2.svg' : '../assets/images/electron.svg'}
-            alt=""
-            width="128px"
-          ></img>
+          {taskTitleNode}
           <h2>{s2m(time)}</h2>
           <div>
             <button type="button" className="btn btn-primary" onClick={this.onClickToStart}>
