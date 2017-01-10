@@ -4,7 +4,6 @@ const NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin');
 const ExternalsPlugin = webpack.ExternalsPlugin;
 
 const DEBUG = !process.argv.includes('--release');
-const distPath = (assetType) => path.resolve(__dirname, `app/dist/${assetType}`);
 
 const Scripts = [
   { key: 'app', file: './app.jsx' },
@@ -19,7 +18,7 @@ const config = {
   context: `${__dirname}/app/components`,
   entry: entryForScripts,
   output: {
-    path: distPath('scripts'),
+    path: path.resolve(__dirname, 'app/dist'),
     filename: '[name].bundle.js',
     sourceMapFilename: '[name].map',
   },
