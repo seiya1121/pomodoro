@@ -4,11 +4,23 @@ import ReactBaseComponent from './reactBaseComponent';
 import { s2m } from '../scripts/coverter';
 import '../styles/main.scss';
 import giphy from 'giphy-api';
+import 'whatwg-fetch';
+import { SlackToken } from '../scripts/secret';
+
+const URL = 'https://slack.com/api/chat.postMessage';
+const username = 'pomodoro-session';
+const message = (messageType, task, isShowTask, gifUrl) => (
+  isShowTask ? `${task} is ${messageType}! ${gifUrl}` : `${messageType}! ${gifUrl}`
+);
+const postMessageUrl = (channel, messageText) => (
+  `${URL}?token=${SlackToken}&channel=${channel}&username=${username}&text=${messageText}`
+);
 
 class App extends ReactBaseComponent {
   constructor(props) {
     super(props);
     this.state = {
+      channelName: '',
       taskTitle: '',
       isStart: false,
       isBreak: false,
@@ -16,6 +28,12 @@ class App extends ReactBaseComponent {
       gifUrl: '',
     };
     this.bind('onClickToStart', 'onClickToReset', 'tick', 'notification', 'onChangeText');
+  }
+
+  sendMessage(messageType, isShowTask) {
+    const { channelName, taskTitle, gifUrl } = this.state;
+    const messageText = message(messageType, taskTitle, isShowTask, gifUrl);
+    fetch(postMessageUrl(channelName, messageText));
   }
 
   getGifUrl(gifType) {
@@ -38,10 +56,12 @@ class App extends ReactBaseComponent {
       this.interval = setInterval(this.tick, 1000);
       this.setState({ isStart: true });
       this.getGifUrl('start');
+      this.sendMessage('started', true);
     } else {
       clearInterval(this.interval);
       this.setState({ isStart: false });
       this.getGifUrl('pause');
+      this.sendMessage('paused', true);
     }
   }
 
@@ -62,10 +82,12 @@ class App extends ReactBaseComponent {
       this.reset();
       this.notification('Break is over!');
       this.getGifUrl('back to work');
+      this.sendMessage('back to work', false);
     } else {
       this.break();
       this.notification('Good work!');
       this.getGifUrl('Good work');
+      this.sendMessage('DONE', true);
     }
   }
 
@@ -95,6 +117,12 @@ class App extends ReactBaseComponent {
       <div className="container">
         <div className="jumbotron main">
           <h2>Pomodoro Timer</h2>
+          <input
+            type="text"
+            placeholder="channel name"
+            onChange={(e) => this.onChangeText('channelName', e.target.value)}
+            value={this.state.channelName}
+          ></input>
           {taskTitleNode}
           <h2>{s2m(time)}</h2>
           <div>
