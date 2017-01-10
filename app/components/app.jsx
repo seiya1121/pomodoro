@@ -83,7 +83,7 @@ class App extends ReactBaseComponent {
     const isPause = !isStart && !isBreak && (time < this.props.duration);
     const taskTitleNode = (
       (isStart || isPause) ?
-        <h3>{taskTitle}</h3> :
+        <h3>{taskTitle === '' ? 'Untitled Task' : taskTitle}</h3> :
         <input
           type="text"
           placeholder="task"
