@@ -13,18 +13,15 @@ class App extends ReactBaseComponent {
       isBreak: false,
       time: this.props.duration,
     };
-    this.bind('handleStartClicked', 'handleResetClicked', 'tick', 'notification');
+    this.bind('onClickToStart', 'onClickToReset', 'tick', 'notification');
   }
 
-  notification(title, option) {
-    const notification = new Notification(
-      `${title} (${this.state.que.length + 1} remained)`,
-      { body: option.body, icon: option.icon, silent: true }
-    );
+  notification(title) {
+    const notification = new Notification(title);
     return notification;
   }
 
-  handleStartClicked() {
+  onClickToStart() {
     if (!this.state.isStart) {
       this.interval = setInterval(this.tick, 1000);
       this.setState({ isStart: true });
@@ -34,7 +31,7 @@ class App extends ReactBaseComponent {
     }
   }
 
-  handleResetClicked() {
+  onClickToReset() {
     this.reset();
   }
 
@@ -56,20 +53,12 @@ class App extends ReactBaseComponent {
   }
 
   break() {
-    this.setState({
-      isStart: true,
-      isBreak: true,
-      time: this.props.breakTime,
-    });
+    this.setState({ isStart: true, isBreak: true, time: this.props.breakTime });
   }
 
   reset() {
     clearInterval(this.interval);
-    this.setState({
-      isStart: false,
-      isBreak: false,
-      time: this.props.duration,
-    });
+    this.setState({ isStart: false, isBreak: false, time: this.props.duration });
   }
 
   render() {
@@ -85,13 +74,13 @@ class App extends ReactBaseComponent {
           ></img>
           <h2>{s2m(time)}</h2>
           <div>
-            <button type="button" className="btn btn-primary" onClick={this.handleStartClicked}>
+            <button type="button" className="btn btn-primary" onClick={this.onClickToStart}>
               {isStart ? 'Pause' : 'Start'}
             </button>
             <button
               type="button"
               className="btn btn-warning"
-              onClick={this.handleResetClicked}
+              onClick={this.onClickToReset}
             >
               Reset
             </button>

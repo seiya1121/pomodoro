@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const path = require('path');
 const NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin');
 const ExternalsPlugin = webpack.ExternalsPlugin;
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const DEBUG = !process.argv.includes('--release');
 const distPath = (assetType) => path.resolve(__dirname, `app/dist/${assetType}`);
@@ -57,11 +56,11 @@ const config = {
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader'),
+        loader: 'style-loader!css-loader',
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader'),
+        loader: 'style-loader!css-loader!sass-loader',
       },
     ],
   },
@@ -89,7 +88,6 @@ const config = {
       'shell',
     ]),
     new NodeTargetPlugin(),
-    new ExtractTextPlugin('css/[name].css'),
   ],
   eslint: {
     configFile: './.eslintrc.json',
