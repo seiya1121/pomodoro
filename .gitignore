@@ -1,4 +1,2 @@
 node_modules
-app/scripts/secret.js
-firebase-debug.log
 app/dist

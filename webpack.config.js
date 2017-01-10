@@ -12,9 +12,7 @@ const Scripts = [
 ];
 
 const Styles = [
-  { key: 'base', file: './base.css' },
-  { key: 'normalize', file: './normalize.css' },
-  { key: 'test', file: './test.scss' },
+  // { key: 'base', file: './base.css' },
 ];
 
 const entryForScripts = {};
