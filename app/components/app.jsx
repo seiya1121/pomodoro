@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ReactBaseComponent from './reactBaseComponent';
 import { s2m } from '../scripts/coverter';
 import '../styles/main.scss';
+import giphy from 'giphy-api';
 
 class App extends ReactBaseComponent {
   constructor(props) {
@@ -12,8 +13,15 @@ class App extends ReactBaseComponent {
       isStart: false,
       isBreak: false,
       time: this.props.duration,
+      gifUrl: '',
     };
     this.bind('onClickToStart', 'onClickToReset', 'tick', 'notification', 'onChangeText');
+  }
+
+  getGifUrl(gifType) {
+    giphy({ apiKey: 'dc6zaTOxFJmzC' })
+      .random(gifType)
+      .then((res) => { this.setState({ gifUrl: res.data.fixed_height_downsampled_url }); });
   }
 
   onChangeText(key, value) {
@@ -29,14 +37,17 @@ class App extends ReactBaseComponent {
     if (!this.state.isStart) {
       this.interval = setInterval(this.tick, 1000);
       this.setState({ isStart: true });
+      this.getGifUrl('start');
     } else {
       clearInterval(this.interval);
       this.setState({ isStart: false });
+      this.getGifUrl('pause');
     }
   }
 
   onClickToReset() {
     this.reset();
+    this.getGifUrl('reset');
   }
 
   tick() {
@@ -50,9 +61,11 @@ class App extends ReactBaseComponent {
     if (this.state.isBreak) {
       this.reset();
       this.notification('Break is over!');
+      this.getGifUrl('back to work');
     } else {
       this.break();
       this.notification('Good work!');
+      this.getGifUrl('Good work');
     }
   }
 
@@ -66,7 +79,7 @@ class App extends ReactBaseComponent {
   }
 
   render() {
-    const { time, isStart, isBreak, taskTitle } = this.state;
+    const { time, isStart, isBreak, taskTitle, gifUrl } = this.state;
     const isPause = !isStart && !isBreak && (time < this.props.duration);
     const taskTitleNode = (
       (isStart || isPause) ?
@@ -96,6 +109,7 @@ class App extends ReactBaseComponent {
               Reset
             </button>
           </div>
+          <img src={gifUrl} alt=""></img>
         </div>
       </div>
     );
