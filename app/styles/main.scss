@@ -1,13 +1,63 @@
+$primary: #008CBA;
+$warning: #f44336;
+
 body {
   cursor: default;
   -webkit-user-select: none;
+  -webkit-app-region: drag;
+  font-family: sans-serif;
 }
 
 a, a:hover, a:visited, a:active, a:focus {
   text-decoration: none;
 }
 
-.main {
-  margin-top: 15px;
+input[type=text] {
+  border: none;
+  border-bottom: 2px solid red;
+}
+
+input[type=text]:focus {
+  border: 3px solid red;
+}
+
+.btn {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 14px 40px;
+  margin: 15px;
   text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background-color: white;
+  color: black;
+  border: 2px solid $primary;
+}
+
+.btn-primary-active {
+  background-color: $primary;
+}
+
+.btn-warning {
+  background-color: white;
+  color: black;
+  border: 2px solid $warning;
+}
+
+.btn-warning-active {
+  background-color: $warning;
+}
+
+.main {
+  margin-top: 45px;
+  text-align: center;
+}
+
+.box {
+  padding: 10px;
 }

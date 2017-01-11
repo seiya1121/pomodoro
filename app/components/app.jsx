@@ -27,7 +27,7 @@ class App extends ReactBaseComponent {
       time: this.props.duration,
       gifUrl: '',
     };
-    this.bind('onClickToStart', 'onClickToReset', 'tick', 'notification', 'onChangeText');
+    this.bind('onClickToStart', 'onClickToEnd', 'tick', 'notification', 'onChangeText');
   }
 
   sendMessage(messageType, isShowTask) {
@@ -65,8 +65,8 @@ class App extends ReactBaseComponent {
     }
   }
 
-  onClickToReset() {
-    this.reset();
+  onClickToEnd() {
+    this.end();
     this.getGifUrl('reset');
   }
 
@@ -79,7 +79,7 @@ class App extends ReactBaseComponent {
 
   finishEvent() {
     if (this.state.isBreak) {
-      this.reset();
+      this.end();
       this.notification('Break is over!');
       this.getGifUrl('back to work');
       this.sendMessage('back to work', false);
@@ -95,7 +95,7 @@ class App extends ReactBaseComponent {
     this.setState({ isStart: true, isBreak: true, time: this.props.breakTime, taskTitle: '' });
   }
 
-  reset() {
+  end() {
     clearInterval(this.interval);
     this.setState({ isStart: false, isBreak: false, time: this.props.duration });
   }
@@ -116,14 +116,18 @@ class App extends ReactBaseComponent {
     return (
       <div className="container">
         <div className="jumbotron main">
-          <h2>Pomodoro Timer</h2>
-          <input
-            type="text"
-            placeholder="channel name"
-            onChange={(e) => this.onChangeText('channelName', e.target.value)}
-            value={this.state.channelName}
-          ></input>
-          {taskTitleNode}
+          <img src="../images/pomo.png" width="128" height="128" alt=""></img>
+          <div className="box">
+            <input
+              type="text"
+              placeholder="channel name"
+              onChange={(e) => this.onChangeText('channelName', e.target.value)}
+              value={this.state.channelName}
+            ></input>
+          </div>
+          <div className="box">
+            {taskTitleNode}
+          </div>
           <h2>{s2m(time)}</h2>
           <div>
             <button type="button" className="btn btn-primary" onClick={this.onClickToStart}>
@@ -132,9 +136,9 @@ class App extends ReactBaseComponent {
             <button
               type="button"
               className="btn btn-warning"
-              onClick={this.onClickToReset}
+              onClick={this.onClickToEnd}
             >
-              Reset
+              End
             </button>
           </div>
           <img src={gifUrl} alt=""></img>
