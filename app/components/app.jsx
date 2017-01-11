@@ -87,7 +87,7 @@ class App extends ReactBaseComponent {
       this.break();
       this.notification('Good work!');
       this.getGifUrl('Good work');
-      this.sendMessage('DONE', true);
+      this.sendMessage('DONE', false);
     }
   }
 
