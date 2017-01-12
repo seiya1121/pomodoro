@@ -116,7 +116,18 @@ class App extends ReactBaseComponent {
     return (
       <div className="container">
         <div className="jumbotron main">
-          <img src="../images/pomo.png" width="128" height="128" alt=""></img>
+          <div className="box">
+            <a href="https://slack.com/oauth/authorize?scope=identity.basic&client_id=43447285095.124901920753">
+              <img
+                alt=""
+                height="40"
+                width="172"
+                src="https://platform.slack-edge.com/img/sign_in_with_slack.png"
+                srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x"
+              />
+            </a>
+          </div>
+          <img src="../images/pomo.png" width="128" height="128" alt="" />
           <div className="box">
             <input
               type="text"
